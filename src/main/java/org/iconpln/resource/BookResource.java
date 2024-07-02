@@ -1,5 +1,6 @@
 package org.iconpln.resource;
 
+import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
@@ -15,7 +16,7 @@ public class BookResource {
     BookService bookService;
     @GET
     public Uni<Response> getAllBook(){
-        return bookService.findAll().onItem().ifNotNull().transform(items-> Response.ok(items).build())
+        return bookService.getAll().onItem().ifNotNull().transform(items-> Response.ok(items).build())
                 .onItem().ifNull().continueWith(Response.ok("Data Not Found").status(404).build());
     }
     @POST

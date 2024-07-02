@@ -6,6 +6,8 @@ import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import org.iconpln.model.Book;
 
+import java.util.List;
+
 @ApplicationScoped
 public class BookService implements PanacheRepository<Book> {
     public Uni<List<Book>> searchTitle(String keyword){
@@ -17,8 +19,8 @@ public class BookService implements PanacheRepository<Book> {
         return findById(id);
     }
 
-    public Uni<List<Book>> findAll() {
-        return Book.findAll().list();
+    public Uni<List<Book>> getAll() {
+        return findAll().list();
     }
     public Uni<Book> save(Book book){
         return Panache.withTransaction(book::persist);
