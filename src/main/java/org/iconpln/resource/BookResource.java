@@ -33,9 +33,8 @@ public class BookResource {
     }
     @GET
     @Path("/{id}")
-    public Uni<Response> getBook(@PathParam("id") String id){
+    public Uni<Book> getBook(@PathParam("id") String id){
         LOG.info("id : {}",id);
-        return bookService.findById(id).onItem().transform(item->Response.ok(item).build())
-                .onFailure().recoverWithItem(Response.ok("Data Not Found").status(404).build());
+        return bookService.findById(id);
     }
 }

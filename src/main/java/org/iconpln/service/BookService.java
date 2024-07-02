@@ -7,6 +7,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import org.iconpln.model.Book;
 
 import java.util.List;
+import java.util.UUID;
 
 @ApplicationScoped
 public class BookService implements PanacheRepository<Book> {
@@ -15,7 +16,8 @@ public class BookService implements PanacheRepository<Book> {
     }
 
     public Uni<Book> findById(String id) {
-        return find("id=?1",id).firstResult();
+        UUID uuid = UUID.fromString(id);
+        return find("id=?1",uuid).firstResult();
     }
 
     public Uni<List<Book>> getAll() {
