@@ -6,6 +6,7 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.iconpln.model.Book;
 import org.iconpln.service.BookService;
 
 @Path("/api/book")
@@ -21,14 +22,14 @@ public class BookResource {
     }
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public Uni<Response> postBook(Book item){
-        return bookService.save(item).onItem().transform(item->Response.ok(item).build())
+    public Uni<Response> postBook(Book book){
+        return bookService.save(book).onItem().transform(item->Response.ok(item).build())
                 .onFailure().recoverWithItem(Response.ok("Terjadi Kesalahan").status(505).build());
     }
     @GET
     @Path("/{id}")
     public Uni<Response> getBook(@PathParam("id") String id){
-        return bookService.findById(id).onItem().ifNotNull().transformToUni(item->Response.ok(item).build())
+        return bookService.findById(id).onItem().ifNotNull().transform(item->Response.ok(item).build())
                 .onItem().ifNull().continueWith(Response.ok("Data Not Found").status(404).build());
     }
 }

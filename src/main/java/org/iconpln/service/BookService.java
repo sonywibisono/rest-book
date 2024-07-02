@@ -14,7 +14,6 @@ public class BookService implements PanacheRepository<Book> {
         return list("title like ?1",keyword);
     }
 
-    @Override
     public Uni<Book> findById(String id) {
         return findById(id);
     }
