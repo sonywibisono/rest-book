@@ -14,7 +14,7 @@ import java.util.UUID;
 @Table(name = "book",schema = "sony")
 public class Book extends PanacheEntityBase {
     @Id
-    private UUID id;
+    public UUID id;
     @Column(name = "title",length = 255)
     public String title;
     @Column(name = "slug",length = 255,unique = true)

@@ -15,7 +15,7 @@ public class BookService implements PanacheRepository<Book> {
     }
 
     public Uni<Book> findById(String id) {
-        return findById(id);
+        return find("id=?1",id).firstResult();
     }
 
     public Uni<List<Book>> getAll() {
