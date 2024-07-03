@@ -9,6 +9,6 @@ public class BookParam {
     public String title;
     @JsonProperty("author")
     public String author;
-    @JsonProperty("isbn13")
-    public String isbn13;
+//    @JsonProperty("isbn13")
+//    public String isbn13;
 }

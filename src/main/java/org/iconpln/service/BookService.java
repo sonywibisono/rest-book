@@ -15,9 +15,9 @@ public class BookService implements PanacheRepository<Book> {
         return list("title like ?1",keyword);
     }
 
-    public Uni<Book> findById(String id) {
-        UUID uuid = UUID.fromString(id);
-        return find("id=?1",uuid).firstResult();
+    public Uni<Book> findById(UUID id) {
+//
+        return find("id=?1",id).firstResult();
     }
 
     public Uni<List<Book>> getAll() {
