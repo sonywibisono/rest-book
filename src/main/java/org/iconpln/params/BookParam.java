@@ -7,8 +7,8 @@ import io.quarkus.runtime.annotations.RegisterForReflection;
 public class BookParam {
     @JsonProperty("title")
     public String title;
-    @JsonProperty("author")
-    public String author;
+    @JsonProperty("author_id")
+    public Long authorId;
 //    @JsonProperty("isbn13")
 //    public String isbn13;
 }

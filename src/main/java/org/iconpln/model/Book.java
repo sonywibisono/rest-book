@@ -1,11 +1,9 @@
 package org.iconpln.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.quarkus.hibernate.reactive.panache.PanacheEntity;
 import io.quarkus.hibernate.reactive.panache.PanacheEntityBase;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.util.Locale;
 import java.util.UUID;
@@ -21,17 +19,21 @@ public class Book extends PanacheEntityBase {
     public String slug;
     @Column(length = 13,name = "isbn_13")
     public String isbn13;
-    @Column(name = "author",length = 100)
-    public String author;
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "author_id")
+    @JsonProperty("author")
+    public Author author;
+
     public Book(){
         this.id = UUID.randomUUID();
     }
 
-    public Book(String title, String isbn13, String author) {
+    public Book(String title, String isbn13, Author author) {
         this.id = UUID.randomUUID();
         this.title = title;
         this.isbn13 = isbn13;
         this.author = author;
         this.slug = title.toLowerCase(Locale.ROOT).replaceAll(" ","_");
     }
+
 }
