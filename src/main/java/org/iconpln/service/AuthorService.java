@@ -24,4 +24,9 @@ public class AuthorService implements PanacheRepository<Author> {
     public Uni<List<Author>> getAll() {
         return Author.listAll();
     }
+
+    @Override
+    public Uni<Boolean> deleteById(Long id) {
+        return Author.deleteById(id);
+    }
 }

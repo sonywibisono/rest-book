@@ -1,5 +1,6 @@
 package org.iconpln.resource;
 
+import io.quarkus.hibernate.reactive.panache.Panache;
 import io.smallrye.mutiny.Uni;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -38,7 +39,6 @@ public class AuthorResource {
     }
     @DELETE
     @Path("/{id}")
-    @Transactional
     public Uni<Response> deleteAuthor(@PathParam("id") Long id){
         MessageResult success = new MessageResult(true,"Hapus Pengarang Sukses!");
         MessageResult failed = new MessageResult(false,"Hapus Pengarang Gagal!");
@@ -47,6 +47,8 @@ public class AuthorResource {
 //            return bookService.setAuthorNull(id).onItem().transformToUni(item->author.delete()
 //                    .onItem().transform(deleted->Response.ok(success).build()));
 //        }).onItem().ifNull().continueWith(Response.ok(failed).status(404).build());
-        return bookService.setAuthorNull(id).onItem().transform(nulls->Response.ok(success).build());
+        return Panache.withTransaction(()->authorService.deleteById(id).map(deleted->{
+            return Response.ok(success).build();
+        }));
     }
 }

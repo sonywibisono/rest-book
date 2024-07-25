@@ -56,6 +56,24 @@ public class BookResource {
             }).onItem().ifNull().continueWith(Response.ok(notfoundMsg).status(404).build());
         });
     }
+    @PUT
+    @Path("/{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Uni<Response> updateBook(@PathParam("id") String id, BookParam param){
+        MessageResult errorMsg = new MessageResult(false,"Terjadi Kesalahan Server");
+        MessageResult notfound = new MessageResult(false,"Buku Tidak Ketemu");
+        MessageResult success = new MessageResult(true,"Buku Sukses!");
+        UUID bookId = UUID.fromString(id);
+        return bookService.findById(bookId).onItem().ifNotNull().transformToUni(item->
+                        authorService.findById(param.authorId).onItem().transformToUni(author -> {
+                            item.title = param.title;
+                            item.author = author;
+                            return bookService.save(item).onItem().transform(book->Response.ok(book).build())
+                                    .onFailure().recoverWithItem(Response.ok(errorMsg).status(505).build());
+                        }))
+                .onItem().ifNull().continueWith(Response.ok(notfound).build());
+
+    }
     @GET
     @Path("/{id}")
     public Uni<Response> getBook(@PathParam("id") String id){
