@@ -68,11 +68,19 @@ public class BookResource {
                         authorService.findById(param.authorId).onItem().transformToUni(author -> {
                             item.title = param.title;
                             item.author = author;
+                            item.setSlug();
                             return bookService.save(item).onItem().transform(book->Response.ok(book).build())
                                     .onFailure().recoverWithItem(Response.ok(errorMsg).status(505).build());
                         }))
                 .onItem().ifNull().continueWith(Response.ok(notfound).build());
 
+    }
+    @POST
+    @Path("/search")
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public Uni<Response> searchBookByTitle(@FormParam("keyword") String keyword){
+        String title = "%"+keyword+"%";
+        return bookService.searchTitle(title).onItem().transform(items->Response.ok(items).build());
     }
     @GET
     @Path("/{id}")

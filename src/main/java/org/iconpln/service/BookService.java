@@ -12,7 +12,7 @@ import java.util.UUID;
 @ApplicationScoped
 public class BookService implements PanacheRepository<Book> {
     public Uni<List<Book>> searchTitle(String keyword){
-        return list("title like ?1",keyword);
+        return list("slug like ?1",keyword);
     }
 
     public Uni<Book> findById(UUID id) {

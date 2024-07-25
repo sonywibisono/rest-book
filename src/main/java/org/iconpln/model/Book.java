@@ -35,5 +35,7 @@ public class Book extends PanacheEntityBase {
         this.author = author;
         this.slug = title.toLowerCase(Locale.ROOT).replaceAll(" ","_");
     }
-
+    public void setSlug(){
+        this.slug = this.title.toLowerCase(Locale.ROOT).replaceAll(" ","_");
+    }
 }
