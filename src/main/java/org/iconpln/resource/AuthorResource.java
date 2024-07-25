@@ -10,12 +10,15 @@ import org.iconpln.model.Author;
 import org.iconpln.params.AuthorParam;
 import org.iconpln.params.MessageResult;
 import org.iconpln.service.AuthorService;
+import org.iconpln.service.BookService;
 
 @Path("/api/author")
 @Produces(MediaType.APPLICATION_JSON)
 public class AuthorResource {
     @Inject
     AuthorService authorService;
+    @Inject
+    BookService bookService;
     @GET
     @Path("/")
     public Uni<Response> getAllAuthor(){
@@ -28,13 +31,22 @@ public class AuthorResource {
         Author author = new Author(param.name,param.email,param.avatar);
         return authorService.persist(author).onItem().transform(item->Response.ok(item).build());
     }
+    @GET
+    @Path("/books/{id}")
+    public Uni<Response> getAuthorBooks(@PathParam("id") Long id){
+        return bookService.getBookByAuthor(id).onItem().transform(items->Response.ok(items).build());
+    }
     @DELETE
     @Path("/{id}")
+    @Transactional
     public Uni<Response> deleteAuthor(@PathParam("id") Long id){
         MessageResult success = new MessageResult(true,"Hapus Pengarang Sukses!");
         MessageResult failed = new MessageResult(false,"Hapus Pengarang Gagal!");
-        return authorService.findById(id).onItem().ifNotNull().transformToUni(author -> {
-            return author.delete().onItem().transform(deleted->Response.ok(success).build());
-        }).onItem().ifNull().continueWith(Response.ok(failed).status(404).build());
+        MessageResult nulled = new MessageResult(true,"Nulled Pengarang Sukses!");
+//        return authorService.findById(id).onItem().ifNotNull().transformToUni(author -> {
+//            return bookService.setAuthorNull(id).onItem().transformToUni(item->author.delete()
+//                    .onItem().transform(deleted->Response.ok(success).build()));
+//        }).onItem().ifNull().continueWith(Response.ok(failed).status(404).build());
+        return bookService.setAuthorNull(id).onItem().transform(nulls->Response.ok(success).build());
     }
 }

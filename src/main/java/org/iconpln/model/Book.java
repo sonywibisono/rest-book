@@ -20,7 +20,7 @@ public class Book extends PanacheEntityBase {
     @Column(length = 13,name = "isbn_13")
     public String isbn13;
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "author_id")
+    @JoinColumn(name = "author_id",nullable = true)
     @JsonProperty("author")
     public Author author;
 
